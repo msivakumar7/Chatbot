@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Chatbot</title>
+<style>
+body {
+    font-family: Arial;
+    background-color: #f4f6f9;
+}
+
+.container {
+    width: 400px;
+    margin: 50px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+}
+
+h2 {
+    text-align: center;
+}
+
+#chatbox {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+input {
+    width: 75%;
+    padding: 10px;
+}
+
+button {
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.user {
+    color: blue;
+}
+
+.bot {
+    color: green;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>AI Chatbot 🤖</h2>
+
+    <div id="chatbox"></div>
+
+    <input id="msg" placeholder="Type message...">
+    <button onclick="send()">Send</button>
+</div>
+
+<script>
+function send(){
+    let text = document.getElementById("msg").value;
+
+    fetch("/chat",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({message:text})
+    })
+    .then(res=>res.json())
+    .then(data=>{
+        document.getElementById("chatbox").innerHTML += 
+        "<p class='user'><b>You:</b> "+text+"</p>" +
+        "<p class='bot'><b>Bot:</b> "+data.reply+"</p>";
+
+        document.getElementById("msg").value = "";
+    });
+}
+</script>
+
+</body>
+</html>
